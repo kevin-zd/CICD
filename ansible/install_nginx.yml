@@ -1,0 +1,32 @@
+---
+- name: 安装并启动 Nginx
+  hosts: dbsrvs  # 替换为你的目标主机组
+  become: yes  # 使用 sudo 权限
+
+  tasks:
+    - name: 安装 EPEL 仓库
+      yum:
+        name: epel-release
+        state: present
+
+    - name: 安装 Nginx
+      yum:
+        name: nginx
+        state: present
+
+    - name: 启动 Nginx 服务
+      systemd:
+        name: nginx
+        state: started
+        enabled: yes  # 确保服务在启动时自动启动
+
+    - name: 检查 Nginx 状态
+      systemd:
+        name: nginx
+        state: started
+      register: nginx_status
+
+    - name: 输出 Nginx 状态
+      debug:
+        var: nginx_status
+
