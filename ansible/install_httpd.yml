@@ -1,0 +1,25 @@
+# 安装示例：httpd.yml
+- hosts: websrvs
+  remote_user: root
+
+  tasks:
+    - name: Install httpd
+      yum: name=httpd state=present
+    - name: Install configure file
+      copy: src=files/httpd.conf dest=/etc/httpd/conf/
+    - name: start service
+      service: name=httpd state=started enabled=yes
+
+
+
+# 卸载示例：remove_httpd.yml
+- hosts: websrvs
+  remote_user: root
+
+  tasks:
+    - name: remove httpd package
+      yum: name=httpd state=absent
+    - name: remove apache user
+      user: name=apache state=absent
+    - name: remove data file
+      file: name=/etc/httpd state=absent
